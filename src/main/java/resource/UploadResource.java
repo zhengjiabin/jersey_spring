@@ -1,7 +1,6 @@
 package resource;
 
 import java.io.InputStream;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import service.UploadFileService;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.FormDataParam;
 import com.sun.jersey.spi.resource.Singleton;
@@ -64,12 +62,11 @@ public class UploadResource {
     @Path(value = "uploadFile2")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public String uploadFile2(@FormDataParam("filename")
-    String filename, @FormDataParam("file")
-    InputStream uploadedInputStream, @FormDataParam("file")
-    FormDataContentDisposition fileDetail, @FormDataParam("keyword")
-    final List<FormDataBodyPart> keywordObjs) {
-        String fileFullName = uploadFileService.uploadFile2(filename, uploadedInputStream, fileDetail);
+    public String uploadFile2(@FormDataParam("file")
+    InputStream fileInputStream, @FormDataParam("file")
+    FormDataContentDisposition fileContentDisposition) {
+        String newFileName = "haha";
+        String fileFullName = uploadFileService.uploadFile2(newFileName, fileInputStream, fileContentDisposition);
         return fileFullName;
     }
 }

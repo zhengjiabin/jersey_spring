@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
-import com.sun.jersey.multipart.FormDataParam;
 
 /**
  * 文件上传
@@ -86,22 +85,31 @@ public class UploadFileService {
         }
     }
     
-    public String uploadFile2(@FormDataParam("fileName")
-    String fileName, @FormDataParam("file")
-    InputStream uploadedInputStream, @FormDataParam("file")
-    FormDataContentDisposition fileDetail) {
-        String fileFullName = fileDetail.getFileName();
+    /**
+     * 测试文件上传
+     * 
+     * @param fileName
+     * @param uploadedInputStream
+     * @param fileDetail
+     * @param keywordObjs
+     * @return
+     */
+    public String uploadFile2(String fileName, InputStream fileInputStream, FormDataContentDisposition fileContentDisposition) {
+        String fileFullName = fileContentDisposition.getFileName();
         
+        String fileType = fileFullName.substring(fileFullName.indexOf("."), fileFullName.length());
+        String newFileName = fileName + fileType;
+        File file = new File("F:/temp", newFileName);
         try {
-            OutputStream outputStream = new FileOutputStream(new File("D:\\upload", fileName + fileFullName.substring(fileFullName.indexOf("."), fileFullName.length())));
+            OutputStream outputStream = new FileOutputStream(file);
             int length = 0;
             
             byte[] buff = new byte[256];
             
-            while (-1 != (length = uploadedInputStream.read(buff))) {
+            while (-1 != (length = fileInputStream.read(buff))) {
                 outputStream.write(buff, 0, length);
             }
-            uploadedInputStream.close();
+            fileInputStream.close();
             outputStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
